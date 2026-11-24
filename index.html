@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RedeTrampo — Encontre profissionais autônomos na sua região</title>
+<meta name="description" content="RedeTrampo conecta profissionais autônomos e clientes em Fortaleza - CE, por bairro e categoria de serviço. Projeto acadêmico relacionado à ODS 8 — Trabalho Decente e Crescimento Econômico.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero faixa-azul">
+    <div class="container">
+      <span class="aviso-demo" style="background:transparent;border-color:var(--dourado);color:var(--dourado-claro);">PROTÓTIPO ACADÊMICO — DADOS DE DEMONSTRAÇÃO</span>
+      <h1>Encontre profissionais autônomos de confiança perto de você</h1>
+      <p>O RedeTrampo aproxima clientes e prestadores de serviço — eletricistas, diaristas, pedreiros, cabeleireiros e muito mais — em Fortaleza - CE, por bairro e categoria.</p>
+
+      <form class="caixa-busca" id="formBuscaRapida" onsubmit="return enviarBuscaRapida(event)">
+        <div class="linha-busca">
+          <div class="campo">
+            <label for="buscaCategoria" style="font-size:0.8rem;color:var(--cinza-medio);">Categoria</label>
+            <select id="buscaCategoria">
+              <option value="todos">Todas as categorias</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="buscaBairro" style="font-size:0.8rem;color:var(--cinza-medio);">Bairro (Fortaleza - CE)</label>
+            <select id="buscaBairro">
+              <option value="todos">Todos os bairros</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primario"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+        </div>
+      </form>
+
+      <div class="links-rapidos">
+        <a href="localizacao.html"><i class="fa-solid fa-location-dot"></i> Buscar por bairro/região</a>
+        <a href="categorias.html"><i class="fa-solid fa-list"></i> Ver todas as categorias</a>
+        <a href="cadastro-profissional.html"><i class="fa-solid fa-user-plus"></i> Cadastrar meu serviço</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <div class="container">
+      <h2 class="secao-titulo">Categorias populares</h2>
+      <p class="secao-subtitulo">Escolha uma área de atuação para ver profissionais de demonstração.</p>
+      <div class="grade-categorias" id="gradeCategoriasHome"></div>
+    </div>
+  </section>
+
+  <section class="secao" style="background:var(--branco);">
+    <div class="container">
+      <h2 class="secao-titulo">Como funciona o RedeTrampo</h2>
+      <p class="secao-subtitulo">Um processo simples, pensado para facilitar a conexão entre clientes e profissionais.</p>
+      <div class="grade-categorias">
+        <div class="cartao-categoria" style="cursor:default;">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <div><span>1. Pesquise</span><p>Escolha o bairro de Fortaleza e a categoria do serviço.</p></div>
+        </div>
+        <div class="cartao-categoria" style="cursor:default;">
+          <i class="fa-solid fa-user-check"></i>
+          <div><span>2. Compare</span><p>Veja perfis demonstrativos com descrição e serviços.</p></div>
+        </div>
+        <div class="cartao-categoria" style="cursor:default;">
+          <i class="fa-solid fa-comment-dots"></i>
+          <div><span>3. Solicite contato</span><p>Envie um pedido de orçamento demonstrativo.</p></div>
+        </div>
+        <div class="cartao-categoria" style="cursor:default;">
+          <i class="fa-solid fa-briefcase"></i>
+          <div><span>4. Trabalhe</span><p>Profissionais também podem se cadastrar na rede.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao faixa-azul">
+    <div class="container" style="text-align:center;">
+      <span class="selo-ods"><i class="fa-solid fa-leaf"></i> ODS 8 — Trabalho Decente e Crescimento Econômico</span>
+      <h2 style="margin-top:16px;">Um projeto acadêmico com propósito social</h2>
+      <p style="max-width:720px;margin:0 auto;color:#dbe4f3;">O RedeTrampo é um Produto Mínimo Viável (MVP) desenvolvido na disciplina F108 — Desenvolvimento de Projeto Aplicado, com o objetivo de aproximar profissionais autônomos de potenciais clientes, fortalecendo o trabalho decente e a geração de renda local.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-grade">
+      <div>
+        <h4>RedeTrampo</h4>
+        <p>Protótipo acadêmico desenvolvido para a disciplina F108, alinhado à ODS 8 — Trabalho Decente e Crescimento Econômico.</p>
+      </div>
+      <div>
+        <h4>Navegação</h4>
+        <p><a href="index.html">Início</a></p>
+        <p><a href="localizacao.html">Localização</a></p>
+        <p><a href="categorias.html">Categorias</a></p>
+        <p><a href="resultados.html">Resultados</a></p>
+      </div>
+      <div>
+        <h4>Profissionais</h4>
+        <p><a href="cadastro-profissional.html">Cadastre seu serviço</a></p>
+        <p><a href="perfil.html?id=1">Ver perfil de exemplo</a></p>
+      </div>
+    </div>
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  function montarGradeCategorias() {
+    const grade = document.getElementById("gradeCategoriasHome");
+    const selectCategoria = document.getElementById("buscaCategoria");
+    CATEGORIAS_DEMO.forEach((cat) => {
+      const opt = document.createElement("option");
+      opt.value = cat.id;
+      opt.textContent = cat.nome;
+      selectCategoria.appendChild(opt);
+
+      const card = document.createElement("a");
+      card.href = "resultados.html?categoria=" + encodeURIComponent(cat.id);
+      card.className = "cartao-categoria";
+      card.innerHTML = '<i class="' + cat.icone + '"></i><br><span>' + cat.nome + '</span>';
+      grade.appendChild(card);
+    });
+  }
+
+  function montarSelectBairros() {
+    preencherSelectBairros(document.getElementById("buscaBairro"), "fortaleza", true);
+  }
+
+  function enviarBuscaRapida(ev) {
+    ev.preventDefault();
+    const categoria = document.getElementById("buscaCategoria").value;
+    const bairro = document.getElementById("buscaBairro").value;
+    const params = new URLSearchParams();
+    if (categoria && categoria !== "todos") params.set("categoria", categoria);
+    if (bairro && bairro !== "todos") params.set("bairro", bairro);
+    window.location.href = "resultados.html" + (params.toString() ? "?" + params.toString() : "");
+    return false;
+  }
+
+  montarGradeCategorias();
+  montarSelectBairros();
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar contato — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="secao">
+    <div class="container" style="max-width:640px;">
+      <nav class="caminho" id="caminhoNav"><a href="index.html">Início</a> / Solicitar contato</nav>
+      <h1 class="secao-titulo"><i class="fa-solid fa-paper-plane"></i> Solicitação de contato / orçamento</h1>
+      <p class="secao-subtitulo" id="subtituloDestinatario">Preencha o formulário para registrar seu interesse no serviço. A equipe do projeto poderá consultar a solicitação na base de validação.</p>
+
+      <div class="alerta alerta-info">
+        <i class="fa-solid fa-circle-info"></i> A solicitação será armazenada no Google Sheets para acompanhamento da equipe. O sistema não envia WhatsApp, SMS ou e-mail automaticamente ao profissional.
+      </div>
+
+      <form class="cartao" id="formContato" novalidate>
+        <div class="form-grupo">
+          <label for="nomeCliente">Seu nome *</label>
+          <input type="text" id="nomeCliente" placeholder="Digite seu nome">
+          <span class="mensagem-erro" id="erroNomeCliente"></span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="telefoneCliente">Telefone para contato *</label>
+          <input type="tel" id="telefoneCliente" placeholder="(00) 00000-0000">
+          <span class="mensagem-erro" id="erroTelefoneCliente"></span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="tipoSolicitacao">Tipo de solicitação *</label>
+          <select id="tipoSolicitacao">
+            <option value="">Selecione</option>
+            <option value="orcamento">Pedido de orçamento</option>
+            <option value="duvida">Dúvida sobre o serviço</option>
+            <option value="agendamento">Agendamento de visita</option>
+          </select>
+          <span class="mensagem-erro" id="erroTipoSolicitacao"></span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="mensagemCliente">Mensagem *</label>
+          <textarea id="mensagemCliente" placeholder="Descreva o serviço que você precisa..."></textarea>
+          <span class="mensagem-erro" id="erroMensagemCliente"></span>
+        </div>
+
+        <div class="form-grupo" style="margin-top:14px;">
+          <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;">
+            <input type="checkbox" id="consentimentoContato" style="width:auto;margin-top:4px;">
+            <span>Autorizo o armazenamento do meu nome, telefone e mensagem para registrar esta solicitação e validar o MVP do RedeTrampo. *</span>
+          </label>
+          <span class="mensagem-erro" id="erroConsentimentoContato"></span>
+        </div>
+        <button type="submit" class="btn btn-primario btn-bloco"><i class="fa-solid fa-paper-plane"></i> Registrar solicitação</button>
+      </form>
+
+      <div class="alerta alerta-sucesso" id="confirmacaoEnvio" style="display:none;">
+        <i class="fa-solid fa-circle-check"></i>
+        <strong>Solicitação registrada com sucesso!</strong>
+        <p id="protocoloSolicitacao" style="margin:6px 0 0;font-weight:400;"></p>
+        <p style="margin:6px 0 0;font-weight:400;">A equipe do projeto poderá consultar o registro na planilha. Nenhuma mensagem automática foi enviada ao profissional.</p>
+        <a href="resultados.html" class="btn btn-secundario" style="margin-top:12px;"><i class="fa-solid fa-arrow-left"></i> Voltar aos resultados</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const id = obterParametroUrl("id");
+  const subtitulo = document.getElementById("subtituloDestinatario");
+  const formContato = document.getElementById("formContato");
+  const botaoContato = formContato.querySelector('button[type="submit"]');
+
+  (async function iniciarContato() {
+    try {
+      await RedeTrampoAPI.carregarProfissionais();
+      const profissional = obterProfissionalPorId(id);
+      if (profissional) {
+        subtitulo.textContent = "Você está registrando uma solicitação para " + profissional.nome + " (" + obterNomeCategoria(profissional.categoriaId) + ").";
+        document.getElementById("caminhoNav").textContent = "Início / Resultados / Perfil / Solicitação de contato";
+      } else {
+        subtitulo.textContent = "Preencha os dados para registrar sua solicitação de contato.";
+      }
+    } catch (erro) {
+      subtitulo.textContent = "Preencha os dados para registrar sua solicitação. A conexão com o banco será verificada no envio.";
+    }
+  })();
+
+  formContato.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    const nomeOk = validarCampoObrigatorio(document.getElementById("nomeCliente"), "erroNomeCliente", "Informe seu nome.");
+    const telOk = validarCampoObrigatorio(document.getElementById("telefoneCliente"), "erroTelefoneCliente", "Informe um telefone para contato.");
+    const tipoOk = validarSelecao(document.getElementById("tipoSolicitacao"), "erroTipoSolicitacao", "Selecione o tipo de solicitação.");
+    const msgOk = validarCampoObrigatorio(document.getElementById("mensagemCliente"), "erroMensagemCliente", "Descreva sua solicitação.");
+    const consentimento = document.getElementById("consentimentoContato").checked;
+    document.getElementById("erroConsentimentoContato").textContent = consentimento ? "" : "Marque a autorização para continuar.";
+    if (!(nomeOk && telOk && tipoOk && msgOk && consentimento)) return;
+
+    if (!id) {
+      alert("Não identificamos o perfil que receberá a solicitação. Volte aos resultados e escolha um profissional.");
+      return;
+    }
+
+    botaoContato.disabled = true;
+    botaoContato.textContent = "Registrando solicitação...";
+    try {
+      const resultado = await RedeTrampoAPI.registrarSolicitacao({
+        profissionalId: id,
+        nomeCliente: document.getElementById("nomeCliente").value.trim(),
+        telefoneCliente: document.getElementById("telefoneCliente").value.trim(),
+        tipoSolicitacao: document.getElementById("tipoSolicitacao").value,
+        mensagem: document.getElementById("mensagemCliente").value.trim(),
+        consentimento: true
+      });
+      formContato.style.display = "none";
+      document.getElementById("protocoloSolicitacao").textContent = "Protocolo: " + resultado.solicitacaoId;
+      document.getElementById("confirmacaoEnvio").style.display = "block";
+      document.getElementById("confirmacaoEnvio").scrollIntoView({ behavior: "smooth" });
+    } catch (erro) {
+      alert("Não foi possível registrar a solicitação: " + erro.message);
+      botaoContato.disabled = false;
+      botaoContato.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Registrar solicitação';
+    }
+  });
+</script>
+</body>
+</html>

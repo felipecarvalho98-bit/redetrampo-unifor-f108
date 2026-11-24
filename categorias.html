@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Categorias — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="secao">
+    <div class="container">
+      <nav class="caminho"><a href="index.html">Início</a> / Categorias</nav>
+      <h1 class="secao-titulo"><i class="fa-solid fa-list"></i> Categorias de serviço</h1>
+      <p class="secao-subtitulo">Escolha uma área de atuação para visualizar os profissionais de demonstração cadastrados no protótipo.</p>
+      <div class="grade-categorias" id="gradeCategorias"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const grade = document.getElementById("gradeCategorias");
+  (async function montarCategorias() {
+    try { await RedeTrampoAPI.carregarProfissionais(); }
+    catch (erro) { console.warn("Não foi possível carregar os cadastros da base:", erro.message); }
+
+    CATEGORIAS_DEMO.forEach((cat) => {
+      const quantidade = obterTodosProfissionais().filter((p) => p.categoriaId === cat.id).length;
+      const card = document.createElement("a");
+      card.href = "resultados.html?categoria=" + encodeURIComponent(cat.id);
+      card.className = "cartao-categoria";
+      card.innerHTML =
+        '<i class="' + escaparHtml(cat.icone) + '"></i><br>' +
+        '<span>' + escaparHtml(cat.nome) + '</span>' +
+        '<p>' + escaparHtml(cat.descricao) + '</p>' +
+        '<p style="color:var(--dourado);font-weight:700;">' + quantidade + ' perfil(is) disponível(is), incluindo exemplos</p>';
+      grade.appendChild(card);
+    });
+  })();
+</script>
+</body>
+</html>

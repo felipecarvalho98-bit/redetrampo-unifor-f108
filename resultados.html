@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultados da pesquisa — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="secao">
+    <div class="container">
+      <nav class="caminho"><a href="index.html">Início</a> / Resultados</nav>
+      <h1 class="secao-titulo"><i class="fa-solid fa-magnifying-glass"></i> Resultados da pesquisa</h1>
+      <p class="secao-subtitulo">Profissionais de demonstração encontrados de acordo com os filtros selecionados.</p>
+
+      <form class="painel-filtros cartao" id="formFiltros">
+        <div class="campo">
+          <label for="filtroCategoria">Categoria</label>
+          <select id="filtroCategoria"><option value="todos">Todas</option></select>
+        </div>
+        <div class="campo">
+          <label for="filtroBairro">Bairro/Região (Fortaleza - CE)</label>
+          <select id="filtroBairro"><option value="todos">Todos os bairros</option></select>
+        </div>
+        <div class="campo">
+          <label for="filtroTermo">Buscar por nome</label>
+          <input type="text" id="filtroTermo" placeholder="Ex: João, eletricista...">
+        </div>
+        <div class="campo">
+          <button type="submit" class="btn btn-primario btn-bloco"><i class="fa-solid fa-filter"></i> Filtrar</button>
+        </div>
+      </form>
+
+      <p class="contador-resultados" id="contadorResultados" aria-live="polite"></p>
+      <p class="dica-campo" id="statusBaseResultados" role="status"></p>
+      <div class="lista-profissionais" id="listaResultados"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const CIDADE_UNICA = "fortaleza";
+  const filtroCategoria = document.getElementById("filtroCategoria");
+  const filtroBairro = document.getElementById("filtroBairro");
+  const filtroTermo = document.getElementById("filtroTermo");
+  const statusBase = document.getElementById("statusBaseResultados");
+
+  CATEGORIAS_DEMO.forEach((cat) => {
+    const opt = document.createElement("option");
+    opt.value = cat.id;
+    opt.textContent = cat.nome;
+    filtroCategoria.appendChild(opt);
+  });
+  preencherSelectBairros(filtroBairro, CIDADE_UNICA, true);
+
+  filtroCategoria.addEventListener("change", renderizarResultados);
+  filtroBairro.addEventListener("change", renderizarResultados);
+  filtroTermo.addEventListener("input", renderizarResultados);
+
+  function aplicarParametrosUrlENoStorage() {
+    const catUrl = obterParametroUrl("categoria");
+    const bairroUrl = obterParametroUrl("bairro");
+    const locSalva = obterLocalizacaoSelecionada();
+    if (catUrl) filtroCategoria.value = catUrl;
+    const bairroFinal = bairroUrl || (locSalva && !catUrl ? locSalva.bairro : null);
+    if (bairroFinal) filtroBairro.value = bairroFinal;
+  }
+
+  function montarCartaoProfissional(p) {
+    const cat = obterCategoriaPorId(p.categoriaId);
+    const div = document.createElement("div");
+    div.className = "cartao-profissional";
+    const perfilExemplo = ehPerfilDeDemonstracao(p);
+    div.innerHTML =
+      '<div class="topo-cartao">' +
+        '<div class="icone-categoria-circulo"><i class="' + escaparHtml(cat ? cat.icone : "fa-solid fa-user") + '"></i></div>' +
+        '<div><h3>' + escaparHtml(p.nome) + '</h3><div class="categoria-nome">' + escaparHtml(cat ? cat.nome : "") + '</div></div>' +
+      '</div>' +
+      '<div class="localizacao-txt"><i class="fa-solid fa-location-dot"></i> ' + escaparHtml(obterNomeCidade(p.cidadeId)) + ' — ' + escaparHtml(p.bairro) + '</div>' +
+      (perfilExemplo ? '<span class="aviso-demo">PERFIL DE EXEMPLO</span>' : '<span class="aviso-demo">CADASTRO PUBLICADO</span>') +
+      '<div class="descricao-curta">' + escaparHtml((p.descricao || '').slice(0, 100)) + ((p.descricao || '').length > 100 ? "…" : "") + '</div>' +
+      '<div class="estrelas">' + gerarEstrelasHtml(p.avaliacao) + ' <span class="texto-avaliacao">(' + Number(p.numAvaliacoes || 0) + (perfilExemplo ? ' avaliações fictícias' : ' avaliações') + ')</span></div>' +
+      '<a href="perfil.html?id=' + encodeURIComponent(p.id) + '" class="btn btn-secundario btn-bloco"><i class="fa-solid fa-user"></i> Ver perfil</a>';
+    return div;
+  }
+
+  function renderizarResultados() {
+    const encontrados = filtrarProfissionais({
+      categoriaId: filtroCategoria.value,
+      cidadeId: CIDADE_UNICA,
+      bairro: filtroBairro.value,
+      termo: filtroTermo.value
+    });
+    const lista = document.getElementById("listaResultados");
+    const contador = document.getElementById("contadorResultados");
+    lista.innerHTML = "";
+    contador.textContent = encontrados.length + " profissional(is) encontrado(s)";
+
+    if (encontrados.length === 0) {
+      lista.innerHTML = '<div class="estado-vazio" style="grid-column:1/-1;"><i class="fa-solid fa-circle-exclamation"></i><p>Nenhum profissional encontrado para esses filtros em Fortaleza. Tente ampliar a busca ou escolher Todos os bairros.</p></div>';
+      return;
+    }
+    encontrados.forEach((profissional) => lista.appendChild(montarCartaoProfissional(profissional)));
+  }
+
+  document.getElementById("formFiltros").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    renderizarResultados();
+  });
+
+  (async function iniciarResultados() {
+    aplicarParametrosUrlENoStorage();
+    statusBase.textContent = "Carregando profissionais cadastrados...";
+    try {
+      await RedeTrampoAPI.carregarProfissionais();
+      statusBase.textContent = "Perfis cadastrados e exemplos estão disponíveis. Os perfis de exemplo estão identificados na tela.";
+    } catch (erro) {
+      statusBase.textContent = "Não foi possível consultar os cadastros compartilhados. Exibindo somente os perfis de exemplo. " + erro.message;
+    }
+    renderizarResultados();
+  })();
+</script>
+</body>
+</html>

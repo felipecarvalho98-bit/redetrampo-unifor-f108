@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planilha de Coleta e Consolidação — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  .grafico-caixa { background:#fff; border:1px solid var(--cinza-borda); border-radius: var(--raio); padding:18px; margin-top:18px; }
+  .grafico-caixa canvas { max-height: 320px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 26px; background: #fff; }
+  th, td { border: 1px solid var(--cinza-borda); padding: 8px; font-size: 0.88rem; text-align: center; }
+  th { background: var(--azul-marinho); color: #fff; }
+  td input, td select { width: 100%; padding: 6px; border: 1px solid var(--cinza-borda); border-radius: 4px; }
+  .nome-col { text-align: left; font-weight: 600; }
+  .resultado-box { background: #fff; border: 2px solid var(--dourado); border-radius: var(--raio); padding: 18px; margin-top: 10px; }
+  .resultado-box h3 { margin-top: 0; color: var(--azul-marinho); }
+  .meta-txt { color: var(--cinza-medio); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<header class="cabecalho"><div class="barra-nav"><a href="../../index.html" class="marca">RedeTrampo — Documentação</a></div></header>
+<main>
+  <section class="secao">
+    <div class="container">
+      <nav class="caminho"><a href="../../index.html">Protótipo</a> / Entrega F108 / Planilha de Coleta</nav>
+      <p style="color:red;font-weight:700;">🔴 PENDENTE — Responsável pelo preenchimento: Felipe Bezerra Carvalho (questionários, métricas, planilhas e gráficos). Nenhum dado abaixo foi preenchido; preencha somente com respostas reais coletadas dos 10 participantes.</p>
+      <h1 class="secao-titulo">Planilha de Coleta e Consolidação dos Resultados</h1>
+      <p class="secao-subtitulo">Preencha esta planilha <strong>somente com respostas reais</strong> coletadas durante a aplicação dos testes com os 10 participantes (Documentos 04 e 05). Os cálculos dos indicadores são feitos automaticamente abaixo. Nenhum valor vem pré-preenchido.</p>
+
+      <div class="alerta alerta-info">
+        <i class="fa-solid fa-circle-info"></i> Esta planilha funciona localmente no navegador (não envia dados a nenhum servidor). Após preencher, você pode usar "Exportar CSV" para guardar os dados, ou simplesmente manter este arquivo como registro.
+      </div>
+
+      <h2 class="secao-titulo" style="font-size:1.2rem;">Grupo A — Profissionais Autônomos (P1 a P5)</h2>
+      <table id="tabelaProfissionais">
+        <thead>
+          <tr>
+            <th class="nome-col">Participante</th>
+            <th>Concluiu o cadastro sem ajuda? (Sim/Com dificuldade/Não)</th>
+            <th>Facilidade de navegação (1-5)</th>
+            <th>Usaria o RedeTrampo? (Sim/Talvez/Não)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2 class="secao-titulo" style="font-size:1.2rem;">Grupo B — Potenciais Clientes (C1 a C5)</h2>
+      <table id="tabelaClientes">
+        <thead>
+          <tr>
+            <th class="nome-col">Participante</th>
+            <th>Encontrou profissional pela busca? (Sim/Com dificuldade/Não)</th>
+            <th>Localizou a opção de contato? (Sim/Com dificuldade/Não)</th>
+            <th>Facilidade de navegação (1-5)</th>
+            <th>Usaria o RedeTrampo? (Sim/Talvez/Não)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <button class="btn btn-primario" onclick="calcularIndicadores()"><i class="fa-solid fa-calculator"></i> Calcular indicadores</button>
+      <button class="btn btn-secundario" onclick="exportarCSV()"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+
+      <div class="resultado-box" id="resultadosCalculados" style="display:none;">
+        <h3><i class="fa-solid fa-chart-column"></i> Indicadores calculados (resultados reais)</h3>
+        <p id="resConclusaoCadastro"></p>
+        <p id="resSucessoPesquisa"></p>
+        <p id="resSucessoContato"></p>
+        <p id="resFacilidadeNav"></p>
+        <p id="resIntencaoUso"></p>
+        <p class="meta-txt">Compare estes resultados com as metas propostas no Plano de Validação e Métricas. Lembre-se: os valores acima só são válidos após a aplicação real dos testes.</p>
+        <div class="grafico-caixa"><canvas id="graficoIndicadores"></canvas></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="rodape"><div class="container"><div class="rodape-base"><p>Planilha de apoio acadêmico — RedeTrampo (F108).</p></div></div></footer>
+
+<script>
+  function montarLinhas(idTabela, prefixo, qtd, colunas) {
+    const tbody = document.querySelector("#" + idTabela + " tbody");
+    for (let i = 1; i <= qtd; i++) {
+      const tr = document.createElement("tr");
+      let html = '<td class="nome-col">' + prefixo + i + '</td>';
+      colunas.forEach((col) => {
+        if (col === "escala") {
+          html += '<td><select data-col="escala"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></td>';
+        } else if (col === "simnaoparcial") {
+          html += '<td><select data-col="simnaoparcial"><option value="">-</option><option>Sim</option><option>Com dificuldade</option><option>Não</option></select></td>';
+        } else if (col === "simtalveznao") {
+          html += '<td><select data-col="simtalveznao"><option value="">-</option><option>Sim</option><option>Talvez</option><option>Não</option></select></td>';
+        }
+      });
+      tr.innerHTML = html;
+      tbody.appendChild(tr);
+    }
+  }
+
+  montarLinhas("tabelaProfissionais", "P", 5, ["simnaoparcial", "escala", "simtalveznao"]);
+  montarLinhas("tabelaClientes", "C", 5, ["simnaoparcial", "simnaoparcial", "escala", "simtalveznao"]);
+
+  function lerColuna(idTabela, indiceColuna) {
+    const linhas = document.querySelectorAll("#" + idTabela + " tbody tr");
+    const valores = [];
+    linhas.forEach((tr) => {
+      const campo = tr.children[indiceColuna].querySelector("select, input");
+      valores.push(campo ? campo.value : "");
+    });
+    return valores;
+  }
+
+  function pctSim(valores) {
+    const preenchidos = valores.filter((v) => v !== "");
+    if (preenchidos.length === 0) return null;
+    const sim = preenchidos.filter((v) => v === "Sim").length;
+    return { pct: ((sim / preenchidos.length) * 100).toFixed(1), total: preenchidos.length };
+  }
+
+  function mediaEscala(valores) {
+    const nums = valores.filter((v) => v !== "").map(Number);
+    if (nums.length === 0) return null;
+    const soma = nums.reduce((a, b) => a + b, 0);
+    return { media: (soma / nums.length).toFixed(2), total: nums.length };
+  }
+
+  function calcularIndicadores() {
+    const conclusaoCadastro = pctSim(lerColuna("tabelaProfissionais", 1));
+    const navProf = lerColuna("tabelaProfissionais", 2);
+    const usoProf = pctSim(lerColuna("tabelaProfissionais", 3));
+
+    const sucessoPesquisa = pctSim(lerColuna("tabelaClientes", 1));
+    const sucessoContato = pctSim(lerColuna("tabelaClientes", 2));
+    const navCli = lerColuna("tabelaClientes", 3);
+    const usoCli = pctSim(lerColuna("tabelaClientes", 4));
+
+    const navUnificada = mediaEscala([...navProf, ...navCli]);
+
+    const usoTotal = (() => {
+      const todos = [...lerColuna("tabelaProfissionais", 3), ...lerColuna("tabelaClientes", 4)].filter((v) => v !== "");
+      if (todos.length === 0) return null;
+      const sim = todos.filter((v) => v === "Sim").length;
+      return { pct: ((sim / todos.length) * 100).toFixed(1), total: todos.length };
+    })();
+
+    document.getElementById("resConclusaoCadastro").innerHTML =
+      "<strong>Conclusão do cadastro (meta ≥ 80%):</strong> " + (conclusaoCadastro ? conclusaoCadastro.pct + "% (n=" + conclusaoCadastro.total + ")" : "sem dados preenchidos ainda");
+    document.getElementById("resSucessoPesquisa").innerHTML =
+      "<strong>Sucesso na pesquisa de serviços (meta ≥ 80%):</strong> " + (sucessoPesquisa ? sucessoPesquisa.pct + "% (n=" + sucessoPesquisa.total + ")" : "sem dados preenchidos ainda");
+    document.getElementById("resSucessoContato").innerHTML =
+      "<strong>Sucesso na localização da opção de contato (meta ≥ 90%):</strong> " + (sucessoContato ? sucessoContato.pct + "% (n=" + sucessoContato.total + ")" : "sem dados preenchidos ainda");
+    document.getElementById("resFacilidadeNav").innerHTML =
+      "<strong>Facilidade de navegação (meta ≥ 4,0):</strong> " + (navUnificada ? "nota média " + navUnificada.media + " (n=" + navUnificada.total + ")" : "sem dados preenchidos ainda");
+    document.getElementById("resIntencaoUso").innerHTML =
+      "<strong>Intenção de utilização (meta ≥ 70%):</strong> " + (usoTotal ? usoTotal.pct + "% (n=" + usoTotal.total + ")" : "sem dados preenchidos ainda");
+
+    document.getElementById("resultadosCalculados").style.display = "block";
+    renderizarGrafico({ conclusaoCadastro, sucessoPesquisa, sucessoContato, navUnificada, usoTotal });
+  }
+
+  let chartIndicadores = null;
+  function renderizarGrafico(dados) {
+    const ctx = document.getElementById("graficoIndicadores").getContext("2d");
+    const labels = ["Conclusão cadastro (%)", "Sucesso pesquisa (%)", "Sucesso contato (%)", "Facilidade nav. (0-5 ×20)", "Intenção de uso (%)"];
+    const valoresReais = [
+      dados.conclusaoCadastro ? Number(dados.conclusaoCadastro.pct) : 0,
+      dados.sucessoPesquisa ? Number(dados.sucessoPesquisa.pct) : 0,
+      dados.sucessoContato ? Number(dados.sucessoContato.pct) : 0,
+      dados.navUnificada ? Number(dados.navUnificada.media) * 20 : 0,
+      dados.usoTotal ? Number(dados.usoTotal.pct) : 0,
+    ];
+    const metas = [80, 80, 90, 80, 70];
+
+    if (chartIndicadores) chartIndicadores.destroy();
+    chartIndicadores = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          { label: "Resultado real (dados inseridos)", data: valoresReais, backgroundColor: "#0b2545" },
+          { label: "Meta proposta", data: metas, backgroundColor: "#c9a227" },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, max: 100 } },
+        plugins: { title: { display: true, text: "Indicadores reais × Metas propostas (preencher com dados reais)" } },
+      },
+    });
+  }
+
+  function exportarCSV() {
+    let csv = "Tabela;Participante;Coluna;Resposta\n";
+    document.querySelectorAll("#tabelaProfissionais tbody tr").forEach((tr) => {
+      const nome = tr.children[0].textContent;
+      ["Conclusao_Cadastro", "Facilidade_Navegacao", "Intencao_Uso"].forEach((label, idx) => {
+        const campo = tr.children[idx + 1].querySelector("select");
+        csv += "Profissionais;" + nome + ";" + label + ";" + (campo ? campo.value : "") + "\n";
+      });
+    });
+    document.querySelectorAll("#tabelaClientes tbody tr").forEach((tr) => {
+      const nome = tr.children[0].textContent;
+      ["Sucesso_Pesquisa", "Sucesso_Contato", "Facilidade_Navegacao", "Intencao_Uso"].forEach((label, idx) => {
+        const campo = tr.children[idx + 1].querySelector("select");
+        csv += "Clientes;" + nome + ";" + label + ";" + (campo ? campo.value : "") + "\n";
+      });
+    });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "redetrampo_planilha_coleta.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

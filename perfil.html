@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil do profissional — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="secao">
+    <div class="container" style="max-width:800px;" id="conteudoPerfil">
+      <!-- Preenchido via JavaScript -->
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  let avaliacoesDoPerfil = [];
+
+  async function renderizarPerfil() {
+    const id = obterParametroUrl("id");
+    const container = document.getElementById("conteudoPerfil");
+    container.innerHTML = '<div class="cartao"><p>Carregando perfil...</p></div>';
+
+    try { await RedeTrampoAPI.carregarProfissionais(); }
+    catch (erro) {
+      container.innerHTML = '<div class="estado-vazio"><i class="fa-solid fa-triangle-exclamation"></i><p>Não foi possível carregar o perfil. Verifique a conexão com a base de dados.</p><a href="resultados.html" class="btn btn-primario">Voltar aos resultados</a></div>';
+      return;
+    }
+
+    const profissional = obterProfissionalPorId(id);
+    if (!profissional) {
+      container.innerHTML = '<div class="estado-vazio"><i class="fa-solid fa-circle-exclamation"></i><p>Profissional não encontrado ou cadastro indisponível.</p><a href="resultados.html" class="btn btn-primario">Voltar aos resultados</a></div>';
+      return;
+    }
+
+    const exemplo = ehPerfilDeDemonstracao(profissional);
+    if (!exemplo) {
+      try { avaliacoesDoPerfil = await RedeTrampoAPI.listarAvaliacoes(id); }
+      catch (erro) { avaliacoesDoPerfil = []; console.warn(erro); }
+    } else {
+      avaliacoesDoPerfil = [];
+    }
+
+    const cat = obterCategoriaPorId(profissional.categoriaId);
+    const rotuloAvaliacoes = exemplo
+      ? '(' + Number(profissional.numAvaliacoes || 0) + ' avaliações fictícias)'
+      : '(' + Number(profissional.numAvaliacoes || 0) + ' avaliações)';
+    const secaoAvaliacoes = exemplo
+      ? '<div class="cartao caixa-avaliar" style="margin-top:22px;"><h3 style="margin-top:0;color:var(--azul-marinho);"><i class="fa-solid fa-star"></i> Avaliações</h3><p class="dica-campo">As estrelas deste perfil são apenas dados fictícios de demonstração. Para testar avaliações salvas na planilha, utilize um perfil cadastrado por um voluntário.</p></div>'
+      : '<div class="cartao caixa-avaliar" style="margin-top:22px;">' +
+          '<h3 style="margin-top:0;color:var(--azul-marinho);"><i class="fa-solid fa-star"></i> Avaliações da comunidade</h3>' +
+          '<p class="dica-campo">Este recurso faz parte da validação acadêmica. Não inclua dados pessoais no comentário.</p>' +
+          '<form id="formAvaliacao"><div class="estrelas-interativas" id="estrelasInterativas"></div>' +
+          '<textarea id="comentarioAvaliacao" maxlength="500" placeholder="Comentário opcional (até 500 caracteres)"></textarea>' +
+          '<label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-weight:400;"><input type="checkbox" id="consentimentoAvaliacao" style="width:auto;margin-top:4px;"><span>Autorizo a publicação desta avaliação no perfil para a validação acadêmica.</span></label>' +
+          '<button type="submit" class="btn btn-secundario" style="margin-top:10px;"><i class="fa-solid fa-check"></i> Enviar avaliação</button></form>' +
+          '<div id="listaAvaliacoesExtras" style="margin-top:16px;"></div></div>';
+    container.innerHTML =
+      '<nav class="caminho"><a href="index.html">Início</a> / <a href="resultados.html">Resultados</a> / Perfil</nav>' +
+      (exemplo ? '<span class="aviso-demo">PERFIL FICTÍCIO DE EXEMPLO</span>' : '<span class="aviso-demo">PROFISSIONAL CADASTRADO</span>') +
+      '<div class="cartao">' +
+        '<div class="cabecalho-perfil">' +
+          '<div class="avatar-perfil"><i class="' + escaparHtml(cat ? cat.icone : "fa-solid fa-user") + '"></i></div>' +
+          '<div><h1 style="margin:0;color:var(--azul-marinho);">' + escaparHtml(profissional.nome) + '</h1>' +
+            '<p class="categoria-nome" style="margin:4px 0;">' + escaparHtml(cat ? cat.nome : "") + '</p>' +
+            '<p class="localizacao-txt" style="margin:0;"><i class="fa-solid fa-location-dot"></i> ' + escaparHtml(obterNomeCidade(profissional.cidadeId)) + ' — ' + escaparHtml(profissional.bairro) + '</p>' +
+            '<div class="estrelas">' + gerarEstrelasHtml(profissional.avaliacao) + ' <span class="texto-avaliacao">' + Number(profissional.avaliacao || 0).toFixed(1) + ' ' + escaparHtml(rotuloAvaliacoes) + '</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<h3 style="color:var(--azul-marinho);margin-top:26px;">Sobre</h3><p>' + escaparHtml(profissional.descricao) + '</p>' +
+        '<h3 style="color:var(--azul-marinho);">Serviços oferecidos</h3><ul class="lista-servicos">' +
+          (Array.isArray(profissional.servicos) ? profissional.servicos : []).map((servico) => '<li>' + escaparHtml(servico) + '</li>').join("") +
+        '</ul>' +
+        '<h3 style="color:var(--azul-marinho);">Região atendida</h3><p><i class="fa-solid fa-map"></i> Fortaleza - CE, bairro/região: ' + escaparHtml(profissional.bairro) + '</p>' +
+        '<a href="contato.html?id=' + encodeURIComponent(profissional.id) + '" class="btn btn-primario btn-bloco" style="margin-top:10px;"><i class="fa-solid fa-paper-plane"></i> Solicitar contato / orçamento</a>' +
+      '</div>' + secaoAvaliacoes;
+
+    document.title = profissional.nome + " — RedeTrampo";
+    if (!exemplo) configurarAvaliacao(profissional.id);
+  }
+
+  function configurarAvaliacao(profissionalId) {
+    const estrelas = document.getElementById("estrelasInterativas");
+    let notaSelecionada = 0;
+    for (let i = 1; i <= 5; i++) {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.setAttribute("aria-label", i + " estrela(s)");
+      botao.innerHTML = '<i class="fa-solid fa-star"></i>';
+      botao.addEventListener("click", () => {
+        notaSelecionada = i;
+        [...estrelas.children].forEach((item, indice) => item.classList.toggle("selecionada", indice < notaSelecionada));
+      });
+      estrelas.appendChild(botao);
+    }
+
+    document.getElementById("formAvaliacao").addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      if (!notaSelecionada) { alert("Selecione de 1 a 5 estrelas."); return; }
+      if (!document.getElementById("consentimentoAvaliacao").checked) { alert("Marque a autorização para publicar a avaliação."); return; }
+      const botao = ev.currentTarget.querySelector('button[type="submit"]');
+      botao.disabled = true;
+      botao.textContent = "Enviando avaliação...";
+      try {
+        await RedeTrampoAPI.registrarAvaliacao({
+          profissionalId: String(profissionalId),
+          nota: notaSelecionada,
+          comentario: document.getElementById("comentarioAvaliacao").value.trim(),
+          consentimento: true
+        });
+        alert("Avaliação registrada na base compartilhada.");
+        window.location.reload();
+      } catch (erro) {
+        alert("Não foi possível salvar a avaliação: " + erro.message);
+      } finally {
+        botao.disabled = false;
+        botao.innerHTML = '<i class="fa-solid fa-check"></i> Enviar avaliação';
+      }
+    });
+    renderizarListaExtras();
+  }
+
+  function renderizarListaExtras() {
+    const elemento = document.getElementById("listaAvaliacoesExtras");
+    if (!elemento) return;
+    if (!avaliacoesDoPerfil.length) {
+      elemento.innerHTML = '<p class="dica-campo">Ainda não há avaliações registradas para este perfil.</p>';
+      return;
+    }
+    elemento.innerHTML = avaliacoesDoPerfil.slice().reverse().map((avaliacao) =>
+      '<div style="border-top:1px solid var(--cinza-borda);padding:8px 0;">' +
+        '<div class="estrelas">' + gerarEstrelasHtml(avaliacao.nota) + '</div>' +
+        (avaliacao.comentario ? '<p style="margin:4px 0;">' + escaparHtml(avaliacao.comentario) + '</p>' : '') +
+        '<p class="dica-campo" style="margin:0;">' + escaparHtml(avaliacao.data || '') + '</p>' +
+      '</div>'
+    ).join("");
+  }
+
+  renderizarPerfil();
+</script>
+</body>
+</html>

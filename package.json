@@ -1,0 +1,10 @@
+{
+  "name": "redetrampo-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MVP acadêmico RedeTrampo - UNIFOR F108",
+  "engines": {
+    "node": ">=20"
+  }
+}

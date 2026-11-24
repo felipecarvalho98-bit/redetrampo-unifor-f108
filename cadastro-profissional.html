@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro profissional — RedeTrampo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="cabecalho">
+  <div class="barra-nav">
+    <a href="index.html" class="marca"><i class="fa-solid fa-people-arrows"></i> RedeTrampo<span class="marca-ponto">.</span></a>
+    <button class="menu-toggle" onclick="alternarMenu()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+    <nav class="nav-principal" id="navPrincipal">
+      <a href="index.html" data-pagina="index.html">Início</a>
+      <a href="localizacao.html" data-pagina="localizacao.html">Localização</a>
+      <a href="categorias.html" data-pagina="categorias.html">Categorias</a>
+      <a href="resultados.html" data-pagina="resultados.html">Resultados</a>
+      <a href="cadastro-profissional.html" data-pagina="cadastro-profissional.html" class="destaque">Sou Profissional</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="secao">
+    <div class="container" style="max-width:720px;">
+      <nav class="caminho"><a href="index.html">Início</a> / Cadastro profissional</nav>
+      <h1 class="secao-titulo"><i class="fa-solid fa-user-plus"></i> Cadastre-se como profissional</h1>
+      <p class="secao-subtitulo">Preencha seus dados profissionais para aparecer nas buscas de demonstração do RedeTrampo.</p>
+
+      <div class="alerta alerta-info">
+        <i class="fa-solid fa-shield-halved"></i> Não solicitamos documentos, senha ou dados bancários. Seu telefone será mantido na base privada do projeto para contato e não será exibido publicamente. Nome, categoria, bairro, descrição e serviços poderão aparecer na busca do RedeTrampo.
+      </div>
+
+      <form class="cartao" id="formCadastro" novalidate>
+        <fieldset>
+          <legend>Dados do profissional</legend>
+
+          <div class="form-grupo">
+            <label for="nomeProf">Nome (ou nome fantasia) *</label>
+            <input type="text" id="nomeProf" placeholder="Ex: Maria da Silva">
+            <span class="mensagem-erro" id="erroNomeProf"></span>
+          </div>
+
+          <div class="form-grupo">
+            <label for="telefoneProf">Telefone de contato *</label>
+            <input type="tel" id="telefoneProf" placeholder="(00) 00000-0000">
+            <span class="mensagem-erro" id="erroTelefoneProf"></span>
+          </div>
+
+          <div class="form-grupo">
+            <label for="categoriaProf">Categoria do serviço *</label>
+            <select id="categoriaProf">
+              <option value="">Selecione sua área de atuação</option>
+            </select>
+            <span class="mensagem-erro" id="erroCategoriaProf"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Localização atendida</legend>
+
+          <div class="form-grupo">
+            <label>Cidade</label>
+            <input type="text" value="Fortaleza - CE" disabled>
+            <p class="dica-campo">O RedeTrampo atende exclusivamente o município de Fortaleza - CE.</p>
+          </div>
+
+          <div class="form-grupo">
+            <label for="bairroProf">Bairro / Região de atendimento *</label>
+            <select id="bairroProf">
+              <option value="">Selecione o bairro</option>
+            </select>
+            <span class="mensagem-erro" id="erroBairroProf"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sobre o serviço</legend>
+
+          <div class="form-grupo">
+            <label for="descricaoProf">Descrição do serviço *</label>
+            <textarea id="descricaoProf" placeholder="Conte um pouco sobre sua experiência e seus serviços"></textarea>
+            <span class="mensagem-erro" id="erroDescricaoProf"></span>
+          </div>
+
+          <div class="form-grupo">
+            <label for="servicosProf">Lista de serviços oferecidos *</label>
+            <textarea id="servicosProf" placeholder="Digite um serviço por linha. Ex:&#10;Instalação elétrica&#10;Manutenção de quadro de luz"></textarea>
+            <p class="dica-campo">Digite um serviço por linha.</p>
+            <span class="mensagem-erro" id="erroServicosProf"></span>
+          </div>
+        </fieldset>
+
+        <div class="form-grupo" style="margin-top:14px;">
+            <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;">
+              <input type="checkbox" id="consentimentoCadastro" style="width:auto;margin-top:4px;">
+              <span>Autorizo o armazenamento dos dados informados para validação acadêmica do RedeTrampo e a exibição pública das informações profissionais (nome, categoria, bairro, descrição e serviços). *</span>
+            </label>
+            <span class="mensagem-erro" id="erroConsentimentoCadastro"></span>
+          </div>
+          <button type="submit" class="btn btn-primario btn-bloco"><i class="fa-solid fa-floppy-disk"></i> Cadastrar profissional</button>
+      </form>
+
+      <div class="alerta alerta-sucesso" id="confirmacaoCadastro" style="display:none;">
+        <i class="fa-solid fa-circle-check"></i>
+        <strong>Cadastro enviado e salvo na base compartilhada!</strong>
+        <p style="margin:6px 0 0;font-weight:400;">Seu perfil estará disponível nas buscas públicas do RedeTrampo. O telefone não aparece no perfil público.</p>
+        <a href="#" id="linkVerPerfilCriado" class="btn btn-secundario" style="margin-top:12px;"><i class="fa-solid fa-eye"></i> Ver meu perfil</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="container">
+    <div class="rodape-base">
+      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/dados.js"></script>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const CIDADE_UNICA = "fortaleza";
+  const categoriaProf = document.getElementById("categoriaProf");
+  const bairroProf = document.getElementById("bairroProf");
+  const formCadastro = document.getElementById("formCadastro");
+  const botaoCadastro = formCadastro.querySelector('button[type="submit"]');
+
+  CATEGORIAS_DEMO.forEach((cat) => {
+    const opt = document.createElement("option");
+    opt.value = cat.id;
+    opt.textContent = cat.nome;
+    categoriaProf.appendChild(opt);
+  });
+  preencherSelectBairros(bairroProf, CIDADE_UNICA, false);
+
+  formCadastro.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+
+    const nomeOk = validarCampoObrigatorio(document.getElementById("nomeProf"), "erroNomeProf", "Informe seu nome.");
+    const telefoneOk = validarCampoObrigatorio(document.getElementById("telefoneProf"), "erroTelefoneProf", "Informe um telefone de contato.");
+    const categoriaOk = validarSelecao(categoriaProf, "erroCategoriaProf", "Selecione a categoria do serviço.");
+    const bairroOk = validarSelecao(bairroProf, "erroBairroProf", "Selecione o bairro/região atendida.");
+    const descricaoOk = validarCampoObrigatorio(document.getElementById("descricaoProf"), "erroDescricaoProf", "Descreva seu serviço.");
+    const servicosOk = validarCampoObrigatorio(document.getElementById("servicosProf"), "erroServicosProf", "Liste ao menos um serviço.");
+    const consentimento = document.getElementById("consentimentoCadastro").checked;
+    document.getElementById("erroConsentimentoCadastro").textContent = consentimento ? "" : "Marque a autorização para continuar.";
+
+    if (!(nomeOk && telefoneOk && categoriaOk && bairroOk && descricaoOk && servicosOk && consentimento)) return;
+
+    const servicosLista = document.getElementById("servicosProf").value
+      .split("\n").map((s) => s.trim()).filter(Boolean).slice(0, 10);
+    const novoProfissional = {
+      nome: document.getElementById("nomeProf").value.trim(),
+      telefone: document.getElementById("telefoneProf").value.trim(),
+      categoriaId: categoriaProf.value,
+      cidadeId: CIDADE_UNICA,
+      bairro: bairroProf.value,
+      descricao: document.getElementById("descricaoProf").value.trim(),
+      servicos: servicosLista,
+      consentimento: true
+    };
+
+    botaoCadastro.disabled = true;
+    botaoCadastro.textContent = "Salvando cadastro...";
+    try {
+      const resultado = await RedeTrampoAPI.cadastrarProfissional(novoProfissional);
+      formCadastro.style.display = "none";
+      document.getElementById("confirmacaoCadastro").style.display = "block";
+      document.getElementById("linkVerPerfilCriado").href = "perfil.html?id=" + encodeURIComponent(resultado.profissional.id);
+      document.getElementById("confirmacaoCadastro").scrollIntoView({ behavior: "smooth" });
+    } catch (erro) {
+      alert("Não foi possível salvar o cadastro: " + erro.message);
+      botaoCadastro.disabled = false;
+      botaoCadastro.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Cadastrar profissional';
+    }
+  });
+</script>
+</body>
+</html>
