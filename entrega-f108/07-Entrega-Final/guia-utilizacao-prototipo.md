@@ -18,13 +18,13 @@ Este guia explica como navegar pelo protótipo do RedeTrampo, publicado no Verce
    Escolha manualmente a cidade e, se quiser, o bairro/região. Ao confirmar, você é levado à tela de Resultados já filtrada.
 
 3. **Categorias (`categorias.html`)**
-   Lista as categorias e a contagem de perfis de exemplo e cadastrados. Clique em uma categoria para ver os resultados filtrados.
+   Lista as categorias e a quantidade de profissionais cadastrados. Clique em uma categoria para ver os resultados filtrados.
 
 4. **Resultados (`resultados.html`)**
-   Mostra perfis fictícios de exemplo e profissionais que autorizaram o cadastro. Use os filtros (categoria, bairro e termo de busca) para refinar a lista. Clique em "Ver perfil" para abrir o perfil completo.
+   Mostra somente profissionais que realizaram o cadastro e autorizaram a publicação. Use os filtros (categoria, bairro e termo de busca) para refinar a lista. Clique em "Ver perfil" para abrir o perfil completo.
 
 5. **Perfil profissional (`perfil.html`)**
-   Mostra os dados do profissional (descrição, serviços, região atendida e avaliações). Perfis de exemplo são identificados como fictícios. Para perfis cadastrados por voluntários, avaliações podem ser registradas na base compartilhada mediante consentimento. No final, há o botão para "Solicitar contato/orçamento".
+   Mostra os dados do profissional cadastrado (descrição, serviços, região atendida e avaliações). O cliente pode registrar uma avaliação mediante consentimento. No final, há o botão para "Solicitar contato/orçamento".
 
 6. **Solicitação de contato (`contato.html`)**
    Formulário para registrar uma solicitação de contato/orçamento. Todos os campos marcados com `*` são obrigatórios e exigem consentimento. A solicitação fica gravada na aba `Solicitacoes`; o sistema não envia mensagem automática ao profissional.
@@ -34,7 +34,7 @@ Este guia explica como navegar pelo protótipo do RedeTrampo, publicado no Verce
 
 ## Observações importantes
 
-- Os perfis pré-cadastrados são **fictícios**, identificados como exemplo/demonstração na interface. Os cadastros de voluntários são reais e devem ser realizados somente com consentimento.
+- Não existem perfis profissionais pré-cadastrados. A busca exibe somente os cadastros enviados por profissionais que autorizaram a publicação.
 - Não é necessário login, senha ou qualquer documento pessoal para usar o protótipo.
 - O protótipo funciona em celular, tablet e computador (layout responsivo). A planilha deve permanecer privada e acessível somente à equipe. Não cadastre documentos, CPF, dados bancários ou outras informações sensíveis.
 - Dados de cadastro, solicitação e avaliação são gravados na planilha compartilhada do projeto. A localização selecionada fica salva no navegador. O telefone do profissional não é exibido no perfil público.
