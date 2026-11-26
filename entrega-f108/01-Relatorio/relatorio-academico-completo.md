@@ -93,7 +93,7 @@ Projeto RedeTrampo — disciplina F108 (Desenvolvimento de Projeto Aplicado), UN
 ### 15.2 Limitações do protótipo atual
 - A persistência compartilhada do MVP utiliza Google Sheets integrado por Apps Script e função serverless no Vercel. A planilha armazena cadastros, solicitações e avaliações; a localização selecionada continua no navegador.
 - Ausência de geolocalização (GPS) ou mapas: seleção de cidade/bairro é manual.
-- Ausência de envio real de mensagens entre cliente e profissional: a solicitação de contato é demonstrativa.
+- A solicitação de contato é registrada na base compartilhada para acompanhamento da equipe; o sistema não envia mensagens automáticas ao profissional.
 - Ausência de autenticação/login, por decisão de escopo (não coleta de dados sensíveis).
 - `[PREENCHER outras limitações identificadas durante os testes reais]`
 
