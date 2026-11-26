@@ -1,12 +1,11 @@
 /* ==========================================================================
-   RedeTrampo — Dados de demonstração (protótipo acadêmico)
-   Os perfis de PROFISSIONAIS_DEMO abaixo são fictícios e aparecem identificados
-   como exemplos. Cadastros, solicitações e avaliações enviados pelos formulários
-   são gravados na base compartilhada Google Sheets por meio da API do projeto.
+   RedeTrampo — Dados de apoio do protótipo acadêmico
+   Categorias e bairros são opções fixas de pesquisa. Os profissionais exibidos
+   no site vêm exclusivamente dos cadastros autorizados na base Google Sheets.
    ========================================================================== */
 
 // ---------------------------------------------------------------------------
-// Cidade e bairros de demonstração (RF05 - pesquisa por bairro/região)
+// Cidade e bairros disponíveis para pesquisa (RF05)
 // ESCOPO GEOGRÁFICO: o RedeTrampo atende EXCLUSIVAMENTE o município de
 // Fortaleza - CE. Nenhuma outra cidade, município ou região metropolitana
 // é contemplada no MVP.
@@ -37,81 +36,15 @@ const CATEGORIAS_DEMO = [
 ];
 
 // ---------------------------------------------------------------------------
-// Profissionais de demonstração (dados fictícios para validação do protótipo)
-// ---------------------------------------------------------------------------
-const PROFISSIONAIS_DEMO = [
-  { id: 1, nome: "João Exemplo da Silva", categoriaId: "eletricista", cidadeId: "fortaleza", bairro: "Aldeota",
-    descricao: "Profissional fictício de demonstração. Atua com instalações elétricas residenciais e manutenção preventiva.",
-    servicos: ["Instalação de tomadas e disjuntores", "Troca de fiação", "Manutenção de quadro elétrico"],
-    avaliacao: 4.8, numAvaliacoes: 32, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 2, nome: "Maria Exemplo Souza", categoriaId: "diarista", cidadeId: "fortaleza", bairro: "Papicu",
-    descricao: "Perfil fictício de demonstração. Serviços de limpeza residencial com experiência comprovada em protótipo.",
-    servicos: ["Limpeza residencial completa", "Limpeza pós-obra (demonstrativo)", "Organização de ambientes"],
-    avaliacao: 4.9, numAvaliacoes: 54, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 3, nome: "Carlos Exemplo Pereira", categoriaId: "pedreiro", cidadeId: "fortaleza", bairro: "Messejana",
-    descricao: "Dados fictícios de demonstração. Experiência simulada em alvenaria e pequenas reformas.",
-    servicos: ["Reboco e acabamento", "Construção de muros (demo)", "Pequenas reformas"],
-    avaliacao: 4.6, numAvaliacoes: 21, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 4, nome: "Ana Exemplo Lima", categoriaId: "cabeleireiro", cidadeId: "fortaleza", bairro: "Centro",
-    descricao: "Perfil de demonstração do protótipo. Serviços de beleza simulados para fins acadêmicos.",
-    servicos: ["Corte de cabelo (demo)", "Manicure e pedicure (demo)", "Escova e tratamento"],
-    avaliacao: 4.7, numAvaliacoes: 40, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 5, nome: "Pedro Exemplo Costa", categoriaId: "informatica", cidadeId: "fortaleza", bairro: "Parangaba",
-    descricao: "Dados fictícios. Suporte técnico simulado em computadores e redes domésticas.",
-    servicos: ["Formatação e manutenção", "Configuração de redes Wi-Fi", "Remoção de vírus (demo)"],
-    avaliacao: 4.5, numAvaliacoes: 18, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 6, nome: "Fernanda Exemplo Alves", categoriaId: "costureira", cidadeId: "fortaleza", bairro: "Benfica",
-    descricao: "Perfil demonstrativo. Ajustes e confecção de roupas simulados para o protótipo acadêmico.",
-    servicos: ["Ajuste de roupas (demo)", "Confecção sob medida (demo)", "Reparos em geral"],
-    avaliacao: 4.9, numAvaliacoes: 27, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 7, nome: "Lucas Exemplo Martins", categoriaId: "pintor", cidadeId: "fortaleza", bairro: "Antônio Bezerra",
-    descricao: "Exemplo fictício de pintor autônomo para fins de teste do sistema RedeTrampo.",
-    servicos: ["Pintura interna e externa (demo)", "Textura e grafiato (demo)", "Pintura de portões"],
-    avaliacao: 4.4, numAvaliacoes: 15, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 8, nome: "Patrícia Exemplo Rocha", categoriaId: "fotografo", cidadeId: "fortaleza", bairro: "Praia de Iracema",
-    descricao: "Perfil fictício de fotografia para demonstração de funcionalidades do protótipo.",
-    servicos: ["Ensaio fotográfico (demo)", "Cobertura de eventos (demo)", "Edição de imagens"],
-    avaliacao: 4.8, numAvaliacoes: 22, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 9, nome: "Rafael Exemplo Nogueira", categoriaId: "encanador", cidadeId: "fortaleza", bairro: "Barra do Ceará",
-    descricao: "Dados de demonstração. Simulação de serviço de encanamento residencial para testes do MVP.",
-    servicos: ["Conserto de vazamentos (demo)", "Instalação de torneiras", "Desentupimento (demo)"],
-    avaliacao: 4.6, numAvaliacoes: 19, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 10, nome: "Juliana Exemplo Ferreira", categoriaId: "designer", cidadeId: "fortaleza", bairro: "Meireles",
-    descricao: "Perfil fictício. Criação de identidade visual simulada para validação do protótipo acadêmico.",
-    servicos: ["Criação de logotipo (demo)", "Identidade visual (demo)", "Artes para redes sociais"],
-    avaliacao: 4.7, numAvaliacoes: 12, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 11, nome: "Marcos Exemplo Teixeira", categoriaId: "eletricista", cidadeId: "fortaleza", bairro: "José Walter",
-    descricao: "Exemplo de demonstração. Atendimento elétrico residencial e comercial simulado.",
-    servicos: ["Instalação de chuveiro elétrico", "Troca de disjuntores", "Laudo elétrico (demo)"],
-    avaliacao: 4.3, numAvaliacoes: 9, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 12, nome: "Beatriz Exemplo Cardoso", categoriaId: "diarista", cidadeId: "fortaleza", bairro: "Montese",
-    descricao: "Perfil fictício de demonstração para a funcionalidade de busca por bairro/região em Fortaleza.",
-    servicos: ["Limpeza residencial (demo)", "Passar roupa (demo)"],
-    avaliacao: 4.9, numAvaliacoes: 31, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 13, nome: "Diego Exemplo Barbosa", categoriaId: "pedreiro", cidadeId: "fortaleza", bairro: "Edson Queiroz",
-    descricao: "Dados simulados. Serviços de construção civil demonstrativos para o protótipo RedeTrampo.",
-    servicos: ["Reforma de banheiro (demo)", "Assentamento de piso (demo)"],
-    avaliacao: 4.5, numAvaliacoes: 14, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 14, nome: "Camila Exemplo Ribeiro", categoriaId: "cabeleireiro", cidadeId: "fortaleza", bairro: "Parquelândia",
-    descricao: "Perfil de demonstração acadêmica. Serviços de beleza simulados.",
-    servicos: ["Coloração (demo)", "Alongamento de cílios (demo)"],
-    avaliacao: 4.6, numAvaliacoes: 24, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-  { id: 15, nome: "Eduardo Exemplo Moraes", categoriaId: "informatica", cidadeId: "fortaleza", bairro: "Cocó",
-    descricao: "Exemplo fictício. Suporte técnico e montagem de computadores simulados no protótipo.",
-    servicos: ["Montagem de PC (demo)", "Backup de dados (demo)", "Instalação de software"],
-    avaliacao: 4.7, numAvaliacoes: 16, telefone: "(85) 9xxxx-xxxx (exemplo)" },
-];
-
-// ---------------------------------------------------------------------------
 // Acesso aos dados
-// Perfis de demonstração permanecem separados dos cadastros reais do Sheets.
+// Somente profissionais cadastrados e autorizados na base são exibidos.
 // PROFISSIONAIS_API é preenchido por js/api.js quando a página carrega.
 // ---------------------------------------------------------------------------
 var PROFISSIONAIS_API = [];
 const CHAVE_LOCALIZACAO = "redetrampo_localizacao_selecionada";
 
 function obterTodosProfissionais() {
-  return [...PROFISSIONAIS_DEMO, ...PROFISSIONAIS_API];
+  return [...PROFISSIONAIS_API];
 }
 
 function obterProfissionalPorId(id) {
@@ -149,12 +82,7 @@ function obterLocalizacaoSelecionada() {
   }
 }
 
-function ehPerfilDeDemonstracao(profissional) {
-  return Number.isInteger(Number(profissional && profissional.id)) &&
-    Number(profissional.id) >= 1 && Number(profissional.id) <= 15;
-}
-
-/** Filtra perfis de demonstração e profissionais reais cadastrados na planilha. */
+/** Filtra somente profissionais cadastrados na planilha. */
 function filtrarProfissionais({ categoriaId, cidadeId, bairro, termo } = {}) {
   let lista = obterTodosProfissionais();
 
