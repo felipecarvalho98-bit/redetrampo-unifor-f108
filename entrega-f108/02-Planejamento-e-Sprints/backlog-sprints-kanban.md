@@ -19,13 +19,13 @@
 |---|---|---|---|
 | BL01 | Definir identidade visual (cores, tipografia, nome) | — | Alta |
 | BL02 | Estruturar páginas HTML das 7 telas do MVP | RF01–RF07 | Alta |
-| BL03 | Criar base de dados fictícia de profissionais, categorias e cidades | RF04, RF05 | Alta |
+| BL03 | Criar estrutura de categorias, cidades e bairros; profissionais entram por cadastro real | RF04, RF05 | Alta |
 | BL04 | Implementar tela de página inicial com busca rápida | RF05 | Alta |
 | BL05 | Implementar tela de localização (cidade/bairro) | RF05 | Alta |
 | BL06 | Implementar tela de categorias | RF04 | Alta |
 | BL07 | Implementar tela de resultados com filtros | RF05, RF06 | Alta |
 | BL08 | Implementar tela de perfil profissional | RF02, RF06 | Alta |
-| BL09 | Implementar avaliação demonstrativa no perfil | RF08 | Média |
+| BL09 | Implementar avaliação dos perfis cadastrados | RF08 | Média |
 | BL10 | Implementar tela de solicitação de contato com validação | RF07 | Alta |
 | BL11 | Implementar tela de cadastro profissional com validação | RF01, RF02, RF03 | Alta |
 | BL12 | Garantir responsividade (celular/tablet/computador) | RNF02 | Alta |
@@ -53,7 +53,7 @@
 | Elaboração do backlog inicial | Ana Braveza Costa (coordenação geral) | <span style="color:red">🔴 PENDENTE</span> | Este documento (seção 1) | Documento 02 |
 
 ### Sprint 2 — Construção do Protótipo
-**Objetivo:** Desenvolver as 7 telas navegáveis do MVP com dados de demonstração.
+**Objetivo:** Desenvolver as 7 telas navegáveis do MVP, com profissionais obtidos por cadastro na base compartilhada.
 
 | Atividade | Responsável | Data prevista | Entregável | Evidência |
 |---|---|---|---|---|
@@ -109,7 +109,7 @@
 - [x] Definição da identidade visual (RedeTrampo — azul-marinho e dourado)
 - [x] Levantamento de requisitos funcionais e não funcionais
 - [x] Construção das 7 telas do protótipo navegável
-- [x] Implementação da base de dados fictícia de demonstração
+- [x] Implementação da base de categorias e localização; os profissionais são cadastrados na base compartilhada
 - [x] Implementação das validações de formulário (cadastro e contato)
 - [x] Verificação de responsividade (celular e computador)
 - [x] Elaboração dos instrumentos de pesquisa (questionários e roteiro de tarefas)
