@@ -29,7 +29,7 @@
     <div class="container">
       <nav class="caminho"><a href="index.html">Início</a> / Resultados</nav>
       <h1 class="secao-titulo"><i class="fa-solid fa-magnifying-glass"></i> Resultados da pesquisa</h1>
-      <p class="secao-subtitulo">Profissionais de demonstração encontrados de acordo com os filtros selecionados.</p>
+      <p class="secao-subtitulo">Profissionais cadastrados encontrados de acordo com os filtros selecionados.</p>
 
       <form class="painel-filtros cartao" id="formFiltros">
         <div class="campo">
@@ -59,7 +59,7 @@
 <footer class="rodape">
   <div class="container">
     <div class="rodape-base">
-      <p>© 2026 RedeTrampo — MVP acadêmico. Perfis identificados como exemplo são fictícios. Cadastros, solicitações e avaliações enviados pelos formulários são armazenados na base do projeto para validação.</p>
+      <p>© 2026 RedeTrampo — MVP acadêmico. Profissionais aparecem nas buscas após realizar o cadastro e autorizar a publicação. Solicitações e avaliações são armazenadas na base do projeto.</p>
     </div>
   </div>
 </footer>
@@ -99,16 +99,15 @@
     const cat = obterCategoriaPorId(p.categoriaId);
     const div = document.createElement("div");
     div.className = "cartao-profissional";
-    const perfilExemplo = ehPerfilDeDemonstracao(p);
     div.innerHTML =
       '<div class="topo-cartao">' +
         '<div class="icone-categoria-circulo"><i class="' + escaparHtml(cat ? cat.icone : "fa-solid fa-user") + '"></i></div>' +
         '<div><h3>' + escaparHtml(p.nome) + '</h3><div class="categoria-nome">' + escaparHtml(cat ? cat.nome : "") + '</div></div>' +
       '</div>' +
       '<div class="localizacao-txt"><i class="fa-solid fa-location-dot"></i> ' + escaparHtml(obterNomeCidade(p.cidadeId)) + ' — ' + escaparHtml(p.bairro) + '</div>' +
-      (perfilExemplo ? '<span class="aviso-demo">PERFIL DE EXEMPLO</span>' : '<span class="aviso-demo">CADASTRO PUBLICADO</span>') +
+      '<span class="aviso-demo">PROFISSIONAL CADASTRADO</span>' +
       '<div class="descricao-curta">' + escaparHtml((p.descricao || '').slice(0, 100)) + ((p.descricao || '').length > 100 ? "…" : "") + '</div>' +
-      '<div class="estrelas">' + gerarEstrelasHtml(p.avaliacao) + ' <span class="texto-avaliacao">(' + Number(p.numAvaliacoes || 0) + (perfilExemplo ? ' avaliações fictícias' : ' avaliações') + ')</span></div>' +
+      '<div class="estrelas">' + gerarEstrelasHtml(p.avaliacao) + ' <span class="texto-avaliacao">(' + Number(p.numAvaliacoes || 0) + ' avaliações' + ')</span></div>' +
       '<a href="perfil.html?id=' + encodeURIComponent(p.id) + '" class="btn btn-secundario btn-bloco"><i class="fa-solid fa-user"></i> Ver perfil</a>';
     return div;
   }
@@ -126,7 +125,7 @@
     contador.textContent = encontrados.length + " profissional(is) encontrado(s)";
 
     if (encontrados.length === 0) {
-      lista.innerHTML = '<div class="estado-vazio" style="grid-column:1/-1;"><i class="fa-solid fa-circle-exclamation"></i><p>Nenhum profissional encontrado para esses filtros em Fortaleza. Tente ampliar a busca ou escolher Todos os bairros.</p></div>';
+      lista.innerHTML = '<div class="estado-vazio" style="grid-column:1/-1;"><i class="fa-solid fa-circle-exclamation"></i><p>Nenhum profissional cadastrado foi encontrado para esses filtros em Fortaleza. Você pode ampliar a busca ou cadastrar seu serviço.</p></div>';
       return;
     }
     encontrados.forEach((profissional) => lista.appendChild(montarCartaoProfissional(profissional)));
@@ -142,9 +141,9 @@
     statusBase.textContent = "Carregando profissionais cadastrados...";
     try {
       await RedeTrampoAPI.carregarProfissionais();
-      statusBase.textContent = "Perfis cadastrados e exemplos estão disponíveis. Os perfis de exemplo estão identificados na tela.";
+      statusBase.textContent = "Profissionais cadastrados carregados com sucesso.";
     } catch (erro) {
-      statusBase.textContent = "Não foi possível consultar os cadastros compartilhados. Exibindo somente os perfis de exemplo. " + erro.message;
+      statusBase.textContent = "Não foi possível consultar os profissionais cadastrados. Os resultados podem estar incompletos. " + erro.message;
     }
     renderizarResultados();
   })();
