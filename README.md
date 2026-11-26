@@ -10,12 +10,12 @@ Esta versão mantém as sete telas originais e substitui o armazenamento local d
 ## O que foi integrado
 
 - Cadastro profissional: salva dados na aba `Profissionais`.
-- Pesquisa e resultados: combinam os perfis fictícios de exemplo com os profissionais reais cadastrados na planilha.
+- Pesquisa e resultados: exibem exclusivamente os profissionais cadastrados e autorizados na planilha.
 - Perfil profissional: carrega os dados do cadastro e as avaliações compartilhadas.
 - Solicitação de contato/orçamento: grava o pedido na aba `Solicitacoes`.
 - Avaliações: são registradas e consultadas na aba `Avaliacoes`.
 - Telefone do profissional não é devolvido pela API pública e não aparece no perfil público.
-- Os perfis fictícios continuam disponíveis, mas são identificados como exemplos.
+- Não há profissionais pré-cadastrados ou fictícios; somente perfis cadastrados com consentimento aparecem nas buscas.
 - O campo de consentimento explica o uso acadêmico dos dados antes do envio.
 
 **Importante:** o sistema registra solicitações na planilha, mas não envia WhatsApp, SMS ou e-mail automaticamente ao profissional. A equipe pode consultar os registros na aba `Solicitacoes`.
@@ -149,7 +149,7 @@ Se o Vercel solicitar para vincular um projeto, é possível responder que desej
 
 Faça os testes abaixo com a equipe primeiro:
 
-1. Abra `cadastro-profissional.html`, cadastre um profissional fictício de teste e marque o consentimento.
+1. Abra `cadastro-profissional.html`, cadastre um perfil interno de teste, com dados de teste sob seu controle, e marque o consentimento.
 2. Confira se a linha apareceu na aba `Profissionais`.
 3. Abra `resultados.html`, pesquise a categoria e bairro do cadastro e confirme se o novo perfil aparece.
 4. Abra o perfil e confirme que o telefone não aparece na página pública.
